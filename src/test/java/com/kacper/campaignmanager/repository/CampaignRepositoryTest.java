@@ -1,7 +1,6 @@
-package com.kacper.campaignmanager;
+package com.kacper.campaignmanager.repository;
 
 import com.kacper.campaignmanager.model.Campaign;
-import com.kacper.campaignmanager.repository.CampaignRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
