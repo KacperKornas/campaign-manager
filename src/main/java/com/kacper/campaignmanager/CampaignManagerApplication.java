@@ -1,4 +1,4 @@
-package com.kacper.campaign_manager;
+package com.kacper.campaignmanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

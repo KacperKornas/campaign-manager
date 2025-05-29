@@ -1,1 +1,2 @@
-com\kacper\campaign_manager\CampaignManagerApplication.class
+com\kacper\campaignmanager\model\Campaign.class
+com\kacper\campaignmanager\CampaignManagerApplication.class
