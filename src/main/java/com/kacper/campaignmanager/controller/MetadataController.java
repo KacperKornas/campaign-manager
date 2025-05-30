@@ -11,13 +11,13 @@ import java.util.List;
 public class MetadataController {
 
     @GetMapping("/keywords")
-    public List<String> GetKeywords() {
+    public List<String> getKeywords() {
         return List.of("marketing", "advertising", "digital", "social media",
                 "SEO", "PPC", "content marketing", "email marketing");
     }
 
     @GetMapping("/towns")
-    public List<String> GetTowns() {
+    public List<String> getTowns() {
         return List.of("WARSAW","KRAKOW","GDANSK","WROCLAW","POZNAN");
     }
 }
