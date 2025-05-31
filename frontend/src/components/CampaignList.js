@@ -39,26 +39,26 @@ function CampaignList() {
       });
   };
 
-  if (loading) return <p>Ładowanie kampanii...</p>;
+  if (loading) return <p>Loading campaign...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div>
-      <h2>Lista Kampanii</h2>
+      <h2>Campaign List</h2>
       {campaigns.length === 0 ? (
-        <p>Brak kampanii do wyświetlenia.</p>
+        <p>No campaigns to display.</p>
       ) : (
         <table style={{ borderCollapse: "collapse", width: "100%" }}>
           <thead>
             <tr>
               <th style={thStyle}>ID</th>
-              <th style={thStyle}>Nazwa</th>
+              <th style={thStyle}>Name</th>
               <th style={thStyle}>Bid Amount</th>
               <th style={thStyle}>Fund</th>
               <th style={thStyle}>Status</th>
               <th style={thStyle}>Town</th>
               <th style={thStyle}>Radius (km)</th>
-              <th style={thStyle}>Akcje</th>
+              <th style={thStyle}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -73,10 +73,10 @@ function CampaignList() {
                 <td style={tdStyle}>{c.radiusKm}</td>
                 <td style={tdStyle}>
                   <button onClick={() => navigate(`/edit/${c.id}`)}>
-                    Edytuj
+                    Edit
                   </button>{" "}
                   <button onClick={() => handleDelete(c.id)}>
-                    Usuń
+                    Delete
                   </button>
                 </td>
               </tr>
