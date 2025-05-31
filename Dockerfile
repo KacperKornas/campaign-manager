@@ -1,19 +1,24 @@
-FROM maven:3.8.7-jdk-17 AS build
+FROM maven:3.8.7-openjdk-17 AS build
 
 WORKDIR /app
-
 COPY pom.xml .
-RUN mvn dependency:go-offline -B
+COPY frontend/package.json frontend/package-lock.json ./frontend/
+
+RUN cd frontend && npm install
 
 COPY src ./src
-RUN mvn clean package -DskipTests -B
+COPY frontend ./frontend
 
-FROM openjdk:17-jdk-slim
+RUN cd frontend && npm run build
+RUN mkdir -p src/main/resources/static && \
+    cp -r frontend/build/* src/main/resources/static/
+
+RUN mvn clean package -DskipTests
+
+FROM openjdk:17-jdk-slim AS runtime
 
 WORKDIR /app
-
-COPY --from=build /app/target/campaign-manager-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/campaign-manager-*.jar app.jar
 
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
