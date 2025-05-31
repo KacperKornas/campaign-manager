@@ -12,7 +12,7 @@ COPY .mvn .mvn
 RUN mvn dependency:go-offline -B
 COPY --from=frontend-build /app/frontend/build ./src/main/resources/static
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn clean package spring-boot:repackage -DskipTests
 
 FROM eclipse-temurin:17-jre-jammy AS runtime
 WORKDIR /app
