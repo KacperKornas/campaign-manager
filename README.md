@@ -4,6 +4,8 @@ A minimal full-stack application for managing marketing campaigns.
 
 - **Live Demo:** [https://campaign-manager-d42d.onrender.com/](https://campaign-manager-d42d.onrender.com/)
 
+This application is hosted on Render.com using the free tier. As a result, the first build and startup may take up to 10–15 minutes when you access the live URL.
+
 ## Tech Stack
 
 - **Backend:** Spring Boot (Java 17) + H2 (in-memory)
