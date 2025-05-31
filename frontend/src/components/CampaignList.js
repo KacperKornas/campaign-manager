@@ -8,26 +8,28 @@ function CampaignList() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const API = process.env.REACT_APP_API_URL || "";
+
   useEffect(() => {
     axios
-      .get("/api/campaigns")
+      .get(`${API}/api/campaigns`)
       .then((response) => {
         setCampaigns(response.data);
         setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setError("Failed to download campaign.");
+        setError("Failed to download campaigns.");
         setLoading(false);
       });
-  }, []);
+  }, [API]);
 
   const handleDelete = (id) => {
     if (!window.confirm("Are you sure you want to delete this campaign?")) {
       return;
     }
     axios
-      .delete(`/api/campaigns/${id}`)
+      .delete(`${API}/api/campaigns/${id}`)
       .then(() => {
         setCampaigns(campaigns.filter((c) => c.id !== id));
       })

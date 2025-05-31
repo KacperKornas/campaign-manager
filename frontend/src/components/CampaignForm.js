@@ -9,22 +9,24 @@ function CampaignForm() {
 
   const [formData, setFormData] = useState({
     name: "",
-    keywords: [],        
+    keywords: [],
     bidAmount: "",
     campaignFund: "",
-    status: false,      
-    town: "",            
+    status: false,
+    town: "",
     radiusKm: "",
   });
 
-  const [errors, setErrors] = useState({});    
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
   const [keywordsOptions, setKeywordsOptions] = useState([]);
   const [townsOptions, setTownsOptions] = useState([]);
 
+  const API = process.env.REACT_APP_API_URL || "";
+
   useEffect(() => {
     axios
-      .get("/api/keywords")
+      .get(`${API}/api/keywords`)
       .then((res) => {
         const opts = res.data.map((kw) => ({ value: kw, label: kw }));
         setKeywordsOptions(opts);
@@ -34,7 +36,7 @@ function CampaignForm() {
       });
 
     axios
-      .get("/api/towns")
+      .get(`${API}/api/towns`)
       .then((res) => {
         const opts = res.data.map((t) => ({ value: t, label: t }));
         setTownsOptions(opts);
@@ -45,7 +47,7 @@ function CampaignForm() {
 
     if (id) {
       axios
-        .get(`/api/campaigns/${id}`)
+        .get(`${API}/api/campaigns/${id}`)
         .then((res) => {
           const c = res.data;
           setFormData({
@@ -62,12 +64,12 @@ function CampaignForm() {
         .catch((err) => {
           console.error(err);
           alert("This campaign could not be found.");
-          navigate("/"); 
+          navigate("/");
         });
     } else {
       setLoading(false);
     }
-  }, [id, navigate]);
+  }, [id, navigate, API]);
 
   if (loading) return <p>Loading data...</p>;
 
@@ -112,11 +114,11 @@ function CampaignForm() {
       radiusKm: parseInt(formData.radiusKm, 10),
     };
 
-    setErrors({}); 
+    setErrors({});
 
     if (id) {
       axios
-        .put(`/api/campaigns/${id}`, payload)
+        .put(`${API}/api/campaigns/${id}`, payload)
         .then(() => {
           navigate("/");
         })
@@ -130,7 +132,7 @@ function CampaignForm() {
         });
     } else {
       axios
-        .post("/api/campaigns", payload)
+        .post(`${API}/api/campaigns`, payload)
         .then(() => {
           navigate("/");
         })
@@ -150,6 +152,7 @@ function CampaignForm() {
       <h2>{id ? `Edit campaign ${id}` : "New Campaign"}</h2>
 
       <form onSubmit={handleSubmit} style={formStyle}>
+        {/* Campaign name */}
         <div style={fieldStyle}>
           <label htmlFor="name">Campaign name:</label>
           <input
@@ -163,6 +166,7 @@ function CampaignForm() {
           {errors.name && <p style={errorStyle}>{errors.name}</p>}
         </div>
 
+        {/* Keywords */}
         <div style={fieldStyle}>
           <label htmlFor="keywords">Keywords:</label>
           <Select
@@ -178,6 +182,7 @@ function CampaignForm() {
           )}
         </div>
 
+        {/* Bid Amount */}
         <div style={fieldStyle}>
           <label htmlFor="bidAmount">Bid amount:</label>
           <input
@@ -194,6 +199,7 @@ function CampaignForm() {
           )}
         </div>
 
+        {/* Campaign Fund */}
         <div style={fieldStyle}>
           <label htmlFor="campaignFund">Campaign fund:</label>
           <input
@@ -210,6 +216,7 @@ function CampaignForm() {
           )}
         </div>
 
+        {/* Status */}
         <div style={fieldStyle}>
           <label htmlFor="status">Status (ON/OFF):</label>
           <input
@@ -225,6 +232,7 @@ function CampaignForm() {
           )}
         </div>
 
+        {/* Town */}
         <div style={fieldStyle}>
           <label htmlFor="town">Town:</label>
           <Select
@@ -242,6 +250,7 @@ function CampaignForm() {
           {errors.town && <p style={errorStyle}>{errors.town}</p>}
         </div>
 
+        {/* Radius */}
         <div style={fieldStyle}>
           <label htmlFor="radiusKm">Radius (km):</label>
           <input
@@ -257,6 +266,7 @@ function CampaignForm() {
           )}
         </div>
 
+        {/* Submit buttons */}
         <div style={fieldStyle}>
           <button type="submit">
             {id ? "Save changes" : "Create a campaign"}
@@ -266,7 +276,7 @@ function CampaignForm() {
             onClick={() => navigate("/")}
             style={{ marginLeft: "15px" }}
           >
-            Anuluj
+            Cancel
           </button>
         </div>
       </form>
