@@ -1,25 +1,21 @@
-FROM maven:3.9.9-eclipse-temurin-17 AS build
+FROM node:18-alpine AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm install
+COPY frontend/ .
+RUN npm run build
 
-
+FROM maven:3.9.9-eclipse-temurin-17 AS backend-build
 WORKDIR /app
-COPY pom.xml .
-COPY frontend/package.json frontend/package-lock.json ./frontend/
-
-RUN cd frontend && npm install
-
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+RUN mvn dependency:go-offline -B
+COPY --from=frontend-build /app/frontend/build ./src/main/resources/static
 COPY src ./src
-COPY frontend ./frontend
-
-RUN cd frontend && npm run build
-RUN mkdir -p src/main/resources/static && \
-    cp -r frontend/build/* src/main/resources/static/
-
 RUN mvn clean package -DskipTests
 
-FROM openjdk:17-jdk-slim AS runtime
-
+FROM eclipse-temurin:17-jre-jammy AS runtime
 WORKDIR /app
-COPY --from=build /app/target/campaign-manager-*.jar app.jar
-
+COPY --from=backend-build /app/target/campaign-manager-*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
